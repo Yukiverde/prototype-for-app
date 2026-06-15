@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Typing Trainer</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+body{
+    min-height:100vh;
+    background:linear-gradient(135deg,#b8f3ff,#ffe5f1);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:20px;
+}
+
+.app{
+    width:100%;
+    max-width:900px;
+    background:white;
+    border-radius:35px;
+    padding:30px;
+    box-shadow:0 15px 40px rgba(0,0,0,0.12);
+}
+
+h1{
+    text-align:center;
+    color:#4f7cff;
+    margin-bottom:20px;
+    font-size:2.4rem;
+}
+
+.subtitle{
+    text-align:center;
+    color:#666;
+    margin-bottom:25px;
+}
+
+.top-bar{
+    display:flex;
+    gap:15px;
+    justify-content:center;
+    flex-wrap:wrap;
+    margin-bottom:20px;
+}
+
+.card{
+    background:#f5f9ff;
+    padding:14px 22px;
+    border-radius:25px;
+    font-weight:bold;
+    color:#444;
+    min-width:120px;
+    text-align:center;
+}
+
+.lesson-box{
+    background:#fff8d6;
+    border-radius:30px;
+    padding:25px;
+    margin-bottom:20px;
+    min-height:130px;
+    display:flex;
+    flex-wrap:wrap;
+    align-items:center;
+    justify-content:center;
+    gap:2px;
+    font-size:2rem;
+    text-align:center;
+}
+
+.correct{
+    color:#8cc63f;
+}
+
+.current{
+    color:#ff5e8a;
+    text-decoration:underline;
+}
+
+.remaining{
+    color:#999;
+}
+
+.input-box{
+    width:100%;
+    padding:18px;
+    border:none;
+    outline:none;
+    border-radius:25px;
+    background:#eef6ff;
+    font-size:1.3rem;
+    text-align:center;
+}
+
+.controls{
+    display:flex;
+    gap:15px;
+    justify-content:center;
+    flex-wrap:wrap;
+    margin-top:20px;
+}
+
+button{
+    border:none;
+    padding:15px 28px;
+    border-radius:25px;
+    font-size:1rem;
+    font-weight:bold;
+    cursor:pointer;
+    transition:.2s;
+}
+
+button:hover{
+    transform:translateY(-2px);
+}
+
+.start{
+    background:#7ee787;
+}
+
+.new{
+    background:#8fd8ff;
+}
+
+.message{
+    margin-top:20px;
+    text-align:center;
+    font-size:1.2rem;
+    color:#555;
+    min-height:35px;
+}
+
+.level-select{
+    display:flex;
+    justify-content:center;
+    gap:10px;
+    flex-wrap:wrap;
+    margin-bottom:20px;
+}
+
+.level{
+    padding:10px 18px;
+    border-radius:20px;
+    background:#f0f0f0;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+.level.active{
+    background:#ffb6d9;
+}
+
+@media(max-width:600px){
+    .lesson-box{
+        font-size:1.4rem;
+    }
+
+    h1{
+        font-size:1.8rem;
+    }
+}
+</style>
+</head>
+<body>
+
+<div class="app">
+
+    <h1>⌨️ Happy Typing Trainer</h1>
+    <div class="subtitle">
+        Learn touch typing without looking at the keyboard!
+    </div>
+
+    <div class="level-select">
+        <div class="level active" data-level="easy">Easy</div>
+        <div class="level" data-level="medium">Medium</div>
+        <div class="level" data-level="hard">Hard</div>
+    </div>
+
+    <div class="top-bar">
+        <div class="card">⏰ Time: <span id="time">30</span></div>
+        <div class="card">🎯 Accuracy: <span id="accuracy">100</span>%</div>
+        <div class="card">⭐ Score: <span id="score">0</span></div>
+    </div>
+
+    <div class="lesson-box" id="lesson"></div>
+
+    <input
+        id="typingInput"
+        class="input-box"
+        type="text"
+        autocomplete="off"
+        spellcheck="false"
+        placeholder="Type here..."
+    >
+
+    <div class="controls">
+        <button class="start" id="startBtn">▶ Start Lesson</button>
+        <button class="new" id="newBtn">🔄 New Words</button>
+    </div>
+
+    <div class="message" id="message">
+        Press Start and begin typing!
+    </div>
+
+</div>
+
+<script>
+const easyLessons = [
+    "cat",
+    "dog",
+    "sun",
+    "book",
+    "apple",
+    "happy",
+    "school",
+    "friend",
+    "hello",
+    "thank you"
+];
+
+const mediumLessons = [
+    "typing is fun",
+    "practice every day",
+    "english is useful",
+    "i like learning",
+    "never give up",
+    "keep your eyes forward"
+];
+
+const hardLessons = [
+    "the quick brown fox jumps over the lazy dog",
+    "accuracy comes before speed",
+    "touch typing is a valuable skill",
+    "consistent practice builds confidence",
+    "successful learners focus on improvement"
+];
+
+let currentText = "";
+let currentIndex = 0;
+let score = 0;
+let totalTyped = 0;
+let mistakes = 0;
+let timeLeft = 30;
+let timer = null;
+let level = "easy";
+let gameActive = false;
+
+const lessonEl = document.getElementById("lesson");
+const inputEl = document.getElementById("typingInput");
+const scoreEl = document.getElementById("score");
+const accuracyEl = document.getElementById("accuracy");
+const timeEl = document.getElementById("time");
+const messageEl = document.getElementById("message");
+
+function createClickSound(){
+    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+    return function(){
+        const osc = audioContext.createOscillator();
+        const gain = audioContext.createGain();
+
+        osc.connect(gain);
+        gain.connect(audioContext.destination);
+
+        osc.type = "square";
+        osc.frequency.value = 1000;
+
+        gain.gain.setValueAtTime(0.05, audioContext.currentTime);
+        gain.gain.exponentialRampToValueAtTime(
+            0.0001,
+            audioContext.currentTime + 0.04
+        );
+
+        osc.start();
+        osc.stop(audioContext.currentTime + 0.04);
+    };
+}
+
+const clickSound = createClickSound();
+
+function getRandomLesson(){
+    let pool;
+
+    if(level === "easy") pool = easyLessons;
+    else if(level === "medium") pool = mediumLessons;
+    else pool = hardLessons;
+
+    return pool[Math.floor(Math.random() * pool.length)];
+}
+
+function renderText(){
+    lessonEl.innerHTML = "";
+
+    for(let i=0;i<currentText.length;i++){
+        const span = document.createElement("span");
+        span.textContent = currentText[i];
+
+        if(i < currentIndex){
+            span.className = "correct";
+        }else if(i === currentIndex){
+            span.className = "current";
+        }else{
+            span.className = "remaining";
+        }
+
+        lessonEl.appendChild(span);
+    }
+}
+
+function loadLesson(){
+    currentText = getRandomLesson();
+    currentIndex = 0;
+    inputEl.value = "";
+    renderText();
+}
+
+function updateAccuracy(){
+    const correct = totalTyped - mistakes;
+    const accuracy = totalTyped === 0
+        ? 100
+        : Math.round((correct / totalTyped) * 100);
+
+    accuracyEl.textContent = accuracy;
+}
+
+function finishLesson(){
+    score += 10;
+    scoreEl.textContent = score;
+
+    messageEl.textContent = "🎉 Great job! New challenge loaded!";
+    loadLesson();
+}
+
+function startGame(){
+    clearInterval(timer);
+
+    score = 0;
+    totalTyped = 0;
+    mistakes = 0;
+    timeLeft = 30;
+
+    scoreEl.textContent = score;
+    accuracyEl.textContent = "100";
+    timeEl.textContent = timeLeft;
+
+    gameActive = true;
+
+    loadLesson();
+
+    timer = setInterval(() => {
+        timeLeft--;
+        timeEl.textContent = timeLeft;
+
+        if(timeLeft <= 0){
+            clearInterval(timer);
+            gameActive = false;
+            messageEl.textContent =
+                "⏰ Time's up! Final score: " + score;
+        }
+    },1000);
+
+    inputEl.focus();
+    messageEl.textContent =
+        "Type the highlighted character!";
+}
+
+inputEl.addEventListener("keydown", function(e){
+
+    if(!gameActive){
+        e.preventDefault();
+        return;
+    }
+
+    if(e.key.length !== 1){
+        e.preventDefault();
+        return;
+    }
+
+    totalTyped++;
+
+    const expected = currentText[currentIndex];
+
+    if(e.key === expected){
+
+        clickSound();
+
+        currentIndex++;
+        renderText();
+
+        if(currentIndex >= currentText.length){
+            finishLesson();
+        }
+
+    }else{
+        mistakes++;
+    }
+
+    updateAccuracy();
+
+    e.preventDefault();
+});
+
+document.getElementById("startBtn").addEventListener("click", () => {
+    startGame();
+});
+
+document.getElementById("newBtn").addEventListener("click", () => {
+    loadLesson();
+    inputEl.focus();
+});
+
+document.querySelectorAll(".level").forEach(btn => {
+    btn.addEventListener("click", () => {
+
+        document
+            .querySelectorAll(".level")
+            .forEach(x => x.classList.remove("active"));
+
+        btn.classList.add("active");
+        level = btn.dataset.level;
+
+        loadLesson();
+    });
+});
+
+loadLesson();
+</script>
+
+</body>
+</html>
