@@ -2,641 +2,183 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Touch Typing Adventure</title>
-
 <style>
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-}
-
-body{
-    font-family:Arial,Helvetica,sans-serif;
-    min-height:100vh;
-    background:linear-gradient(135deg,#87d8ff,#8f8cff,#b55dff);
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    padding:20px;
-}
-
-.app{
-    width:100%;
-    max-width:1100px;
-    background:white;
-    border-radius:40px;
-    padding:25px;
-    box-shadow:0 20px 50px rgba(0,0,0,.15);
-}
-
-.header{
-    display:flex;
-    gap:20px;
-    align-items:center;
-    justify-content:center;
-    flex-wrap:wrap;
-    margin-bottom:20px;
-}
-
-.logo{
-    width:90px;
-    height:90px;
-    object-fit:contain;
-    border-radius:25px;
-}
-
-h1{
-    color:#2f4fff;
-    font-size:2.4rem;
-}
-
-.subtitle{
-    text-align:center;
-    color:#666;
-    margin-bottom:20px;
-}
-
-.stats{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
-    gap:12px;
-    margin-bottom:20px;
-}
-
-.card{
-    background:#eef7ff;
-    border-radius:25px;
-    padding:15px;
-    text-align:center;
-    font-weight:bold;
-}
-
-.lessonInfo{
-    background:#fff5c7;
-    border-radius:25px;
-    padding:18px;
-    margin-bottom:15px;
-    text-align:center;
-}
-
-.lessonTitle{
-    font-size:1.3rem;
-    font-weight:bold;
-    color:#555;
-    margin-bottom:8px;
-}
-
-.lessonInstruction{
-    color:#444;
-    line-height:1.5;
-}
-
-.textDisplay{
-    background:#f7f9ff;
-    min-height:150px;
-    border-radius:30px;
-    padding:25px;
-    font-size:2rem;
-    line-height:1.7;
-    text-align:center;
-    margin-bottom:15px;
-    word-wrap:break-word;
-}
-
-.correct{
-    color:#6fcf4a;
-}
-
-.current{
-    color:#ff4f8a;
-    text-decoration:underline;
-}
-
-.remaining{
-    color:#999;
-}
-
-.inputBox{
-    width:100%;
-    padding:20px;
-    font-size:1.3rem;
-    border:none;
-    border-radius:25px;
-    background:#eef7ff;
-    text-align:center;
-    outline:none;
-}
-
-.controls{
-    display:flex;
-    flex-wrap:wrap;
-    justify-content:center;
-    gap:10px;
-    margin-top:15px;
-}
-
-button{
-    border:none;
-    border-radius:25px;
-    padding:14px 24px;
-    cursor:pointer;
-    font-weight:bold;
-    font-size:1rem;
-}
-
-.startBtn{
-    background:#79e285;
-}
-
-.nextBtn{
-    background:#82d3ff;
-}
-
-.countdown{
-    text-align:center;
-    font-size:3rem;
-    font-weight:bold;
-    color:#ff3d3d;
-    height:60px;
-    margin-top:10px;
-}
-
-.message{
-    margin-top:10px;
-    text-align:center;
-    font-size:1.1rem;
-    min-height:35px;
-}
-
-.progressBar{
-    height:22px;
-    background:#eee;
-    border-radius:50px;
-    overflow:hidden;
-    margin-bottom:20px;
-}
-
-.progress{
-    height:100%;
-    width:0%;
-    background:linear-gradient(90deg,#69d4ff,#7c7cff);
-    transition:.3s;
-}
-
-.modal{
-    position:fixed;
-    inset:0;
-    background:rgba(0,0,0,.6);
-    display:none;
-    justify-content:center;
-    align-items:center;
-    z-index:999;
-}
-
-.modalContent{
-    background:white;
-    width:90%;
-    max-width:500px;
-    border-radius:35px;
-    padding:30px;
-    text-align:center;
-}
-
-.modalContent h2{
-    color:#4a5cff;
-    margin-bottom:15px;
-}
-
-.modalContent p{
-    margin:10px 0;
-    font-size:1.1rem;
-}
-
-.modalContent button{
-    margin-top:15px;
-    background:#79e285;
-}
-
-@media(max-width:700px){
-    .textDisplay{
-        font-size:1.3rem;
-    }
-
-    h1{
-        font-size:1.8rem;
-    }
-}
+body{font-family:Arial,sans-serif;background:linear-gradient(135deg,#87d8ff,#a38bff);margin:0;padding:20px}
+.app{max-width:1100px;margin:auto;background:#fff;border-radius:30px;padding:20px}
+.header{display:flex;align-items:center;gap:15px;justify-content:center}
+.logo{width:80px;height:80px}
+.stats,.controls{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin:10px 0}
+.card,button,.panel{background:#eef6ff;border-radius:20px;padding:12px}
+button{border:none;cursor:pointer;font-weight:bold}
+.text{font-size:2rem;min-height:120px;background:#fafcff;border-radius:20px;padding:20px;line-height:1.8}
+.correct{color:#3cb043}.current{color:#ff4d7a;text-decoration:underline}.remaining{color:#999}
+#countdown{font-size:3rem;text-align:center;color:red;height:60px}
+.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);align-items:center;justify-content:center}
+.modalbox{background:white;padding:30px;border-radius:25px;text-align:center}
 </style>
 </head>
 <body>
-
 <div class="app">
+<div class="header"><img src="logo.png" class="logo"><h1>Touch Typing Adventure</h1></div>
 
-    <div class="header">
-        <img src="logo.png" class="logo" alt="logo">
-        <h1>Touch Typing Adventure</h1>
-    </div>
-
-    <div class="subtitle">
-        Learn touch typing step by step without looking at the keyboard!
-    </div>
-
-    <div class="stats">
-        <div class="card">⏰ Time<br><span id="time">60</span></div>
-        <div class="card">⭐ Score<br><span id="score">0</span></div>
-        <div class="card">🎯 Accuracy<br><span id="accuracy">100%</span></div>
-        <div class="card">🏆 Level<br><span id="level">1</span></div>
-    </div>
-
-    <div class="progressBar">
-        <div class="progress" id="progress"></div>
-    </div>
-
-    <div class="lessonInfo">
-        <div class="lessonTitle" id="lessonTitle"></div>
-        <div class="lessonInstruction" id="lessonInstruction"></div>
-    </div>
-
-    <div id="textDisplay" class="textDisplay"></div>
-
-    <input
-        id="typingInput"
-        class="inputBox"
-        placeholder="Type here..."
-        autocomplete="off"
-        spellcheck="false"
-    >
-
-    <div class="countdown" id="countdown"></div>
-
-    <div class="controls">
-        <button class="startBtn" id="startBtn">▶ Start Adventure</button>
-        <button class="nextBtn" id="nextBtn">⏭ Next Exercise</button>
-    </div>
-
-    <div class="message" id="message"></div>
-
+<div class="controls">
+<button id="instructionBtn">Instruction Mode</button>
+<button id="exerciseBtn">Exercise Mode</button>
+<button id="startBtn">Start</button>
+<label class="panel"><input type="checkbox" id="timerToggle" checked> Timer Enabled</label>
 </div>
 
-<div class="modal" id="gameOverModal">
-    <div class="modalContent">
-        <h2>🎉 Game Over!</h2>
-
-        <p>Score: <strong id="finalScore"></strong></p>
-        <p>Accuracy: <strong id="finalAccuracy"></strong></p>
-        <p>Level Reached: <strong id="finalLevel"></strong></p>
-
-        <button onclick="location.reload()">Play Again</button>
-    </div>
+<div class="stats">
+<div class="card">Time: <span id="time">60</span></div>
+<div class="card">Score: <span id="score">0</span></div>
+<div class="card">Level: <span id="level">1</span></div>
+<div class="card">Accuracy: <span id="accuracy">100%</span></div>
 </div>
 
-<audio id="clickSound" preload="auto">
-    <source src="Mouseclicksound.mp3" type="audio/mpeg">
-</audio>
+<div class="panel"><b id="lessonTitle">Home Keys</b><br><span id="lessonText">Put index fingers on F and J.</span></div>
+
+<div id="text" class="text"></div>
+<div id="countdown"></div>
+
+<div class="panel">Type on your keyboard. Spaces are automatic and do NOT require pressing Space.</div>
+</div>
+
+<div class="modal" id="gameover">
+<div class="modalbox">
+<h2>Game Over</h2>
+<p>Score: <span id="finalScore"></span></p>
+<button onclick="location.reload()">Play Again</button>
+</div>
+</div>
+
+<audio id="click" src="Mouseclicksound.mp3" preload="auto"></audio>
 
 <script>
-
-const lessons = [
-
-{
-title:"Level 1 - Home Position",
-instruction:"Place your left index finger on F and your right index finger on J. Feel the bumps on these keys.",
-sentences:[
-"f j f j",
-"ff jj ff jj",
-"fj fj fj fj",
-"jf jf jf jf",
-"f j f j f j",
-"jj ff jj ff"
-]
-},
-
-{
-title:"Level 2 - Home Row",
-instruction:"Keep fingers on ASDF and JKL;. Return to home position after every key.",
-sentences:[
-"asdf jkl",
-"dad fad",
-"sad lad",
-"ask flask",
-"falls all",
-"dad asks"
-]
-},
-
-{
-title:"Level 3 - Top Row",
-instruction:"Reach upward and return to home row.",
-sentences:[
-"we were quiet",
-"type your way",
-"try to write",
-"power over fear",
-"quick red tree",
-"we require practice"
-]
-},
-
-{
-title:"Level 4 - Bottom Row",
-instruction:"Reach down and return to home row.",
-sentences:[
-"zoo zoom zone",
-"xray buzz",
-"very brave zebra",
-"move your fingers",
-"victory comes slowly",
-"never give up"
-]
-},
-
-{
-title:"Level 5 - Words",
-instruction:"Type common words while keeping eyes on the screen.",
-sentences:[
-"apple orange banana grape",
-"school teacher student lesson",
-"friend family music movie",
-"happy funny clever bright",
-"travel future dream adventure",
-"garden flower river mountain"
-]
-},
-
-{
-title:"Level 6 - Sentences",
-instruction:"Type complete sentences smoothly and accurately.",
-sentences:[
-"The cat sleeps on the sofa.",
-"I enjoy learning English every day.",
-"Practice makes typing feel natural.",
-"My friend likes reading books.",
-"We walked through the park together.",
-"The weather is beautiful today."
-]
-},
-
-{
-title:"Level 7 - Advanced",
-instruction:"Focus on speed and accuracy together.",
-sentences:[
-"The quick brown fox jumps over the lazy dog.",
-"Consistent effort creates remarkable improvement.",
-"Learning new skills requires patience and focus.",
-"Successful students build strong daily habits.",
-"Small actions repeated daily produce huge results.",
-"Typing confidently helps communication and productivity."
-]
-}
-
+const lessons=[
+{t:"Home Keys",i:"Put index fingers on F and J.",s:["fjfjfj","jfjfjf"]},
+{t:"Home Row",i:"Return fingers to home row.",s:["asdf jkl","sad lad","dad asks"]},
+{t:"Words",i:"Type common words.",s:["apple orange banana","school teacher student","happy bright future"]},
+{t:"Sentences",i:"Type full sentences.",s:["I enjoy learning English every day.","Practice makes progress.","Small steps create big results."]}
 ];
 
-const extraWords = [
-"apple","banana","orange","grape","watermelon","peach","pear","plum","mango","kiwi",
-"school","teacher","student","library","notebook","computer","science","history","music","art",
-"friend","family","brother","sister","mother","father","uncle","aunt","cousin","neighbor",
-"happy","excited","careful","brave","strong","gentle","creative","curious","friendly","helpful",
-"morning","afternoon","evening","night","today","tomorrow","yesterday","weekend","holiday","vacation",
-"mountain","river","ocean","forest","desert","village","city","country","island","beach",
-"practice","improve","develop","achieve","explore","discover","create","learn","study","grow",
-"adventure","journey","challenge","opportunity","success","progress","confidence","knowledge","wisdom","experience"
-];
-
-for(let i=0;i<150;i++){
-    extraWords.push(
-        extraWords[i % extraWords.length] +
-        " " +
-        extraWords[(i+7)%extraWords.length] +
-        " " +
-        extraWords[(i+13)%extraWords.length]
-    );
+const extras=[];
+const words=["apple","orange","teacher","student","future","travel","friend","happy","practice","improve","adventure","mountain","river","music","library","computer"];
+for(let i=0;i<220;i++){
+ extras.push(words[i%words.length]+" "+words[(i+3)%words.length]+" "+words[(i+7)%words.length]);
 }
 
-const clickSound = document.getElementById("clickSound");
+let lesson=0,item=0,pos=0,score=0,total=0,mistakes=0,time=60,timer=null;
+let mode="instruction";
 
-let levelIndex = 0;
-let sentenceIndex = 0;
-let currentText = "";
-let currentPos = 0;
-let score = 0;
-let totalTyped = 0;
-let mistakes = 0;
-let timeLeft = 60;
-let timer;
-let gameRunning = false;
+const click=document.getElementById("click");
+const pool=[];
+for(let i=0;i<8;i++){ pool.push(new Audio("Mouseclicksound.mp3")); }
 
-const display = document.getElementById("textDisplay");
-const input = document.getElementById("typingInput");
-
-function loadExercise(){
-
-    const lesson = lessons[levelIndex];
-
-    document.getElementById("lessonTitle").textContent =
-        lesson.title;
-
-    document.getElementById("lessonInstruction").textContent =
-        lesson.instruction;
-
-    currentText =
-        lesson.sentences[
-            sentenceIndex % lesson.sentences.length
-        ];
-
-    currentPos = 0;
-
-    renderText();
+function playClick(){
+ const a=pool.find(x=>x.paused)||pool[0];
+ a.currentTime=0;
+ a.play().catch(()=>{});
 }
 
-function renderText(){
-
-    display.innerHTML = "";
-
-    for(let i=0;i<currentText.length;i++){
-
-        const span = document.createElement("span");
-
-        span.textContent = currentText[i];
-
-        if(i < currentPos){
-            span.className = "correct";
-        }
-        else if(i === currentPos){
-            span.className = "current";
-        }
-        else{
-            span.className = "remaining";
-        }
-
-        display.appendChild(span);
-    }
-
-    const progress =
-        (currentPos/currentText.length)*100;
-
-    document.getElementById("progress").style.width =
-        progress + "%";
+function currentText(){
+ if(lesson<lessons.length) return lessons[lesson].s[item];
+ return extras[(item)%extras.length];
 }
 
-function updateAccuracy(){
-
-    let accuracy = 100;
-
-    if(totalTyped > 0){
-        accuracy =
-            Math.round(
-                ((totalTyped-mistakes)/totalTyped)*100
-            );
-    }
-
-    document.getElementById("accuracy").textContent =
-        accuracy + "%";
+function render(){
+ const txt=currentText();
+ const box=document.getElementById("text");
+ box.innerHTML="";
+ for(let i=0;i<txt.length;i++){
+  const s=document.createElement("span");
+  s.textContent=txt[i];
+  s.className=i<pos?"correct":i===pos?"current":"remaining";
+  box.appendChild(s);
+ }
+ document.getElementById("lessonTitle").textContent=lesson<lessons.length?lessons[lesson].t:"Free Practice";
+ document.getElementById("lessonText").textContent=lesson<lessons.length?lessons[lesson].i:"Keep going!";
 }
 
-function nextExercise(){
-
-    sentenceIndex++;
-
-    if(sentenceIndex >= lessons[levelIndex].sentences.length){
-
-        sentenceIndex = 0;
-
-        if(levelIndex < lessons.length-1){
-
-            levelIndex++;
-
-            document.getElementById("level").textContent =
-                levelIndex + 1;
-
-            document.getElementById("message").textContent =
-                "🎉 Level Up!";
-        }
-        else{
-
-            const random =
-                extraWords[
-                    Math.floor(Math.random()*extraWords.length)
-                ];
-
-            currentText = random;
-            currentPos = 0;
-            renderText();
-            return;
-        }
-    }
-
-    loadExercise();
+function nextItem(){
+ pos=0; item++;
+ if(lesson<lessons.length && item>=lessons[lesson].s.length){ lesson++; item=0; }
+ document.getElementById("level").textContent=Math.min(lesson+1, lessons.length+1);
+ render();
 }
 
-function startGame(){
-
-    clearInterval(timer);
-
-    gameRunning = true;
-    score = 0;
-    totalTyped = 0;
-    mistakes = 0;
-    timeLeft = 60;
-
-    document.getElementById("score").textContent = score;
-    document.getElementById("time").textContent = timeLeft;
-
-    loadExercise();
-
-    timer = setInterval(()=>{
-
-        timeLeft--;
-
-        document.getElementById("time").textContent =
-            timeLeft;
-
-        if(timeLeft <= 5 && timeLeft > 0){
-
-            document.getElementById("countdown").textContent =
-                timeLeft;
-
-        }
-
-        if(timeLeft === 0){
-
-            clearInterval(timer);
-
-            gameRunning = false;
-
-            document.getElementById("countdown").textContent =
-                "";
-
-            document.getElementById("finalScore").textContent =
-                score;
-
-            document.getElementById("finalAccuracy").textContent =
-                document.getElementById("accuracy").textContent;
-
-            document.getElementById("finalLevel").textContent =
-                levelIndex + 1;
-
-            document.getElementById("gameOverModal").style.display =
-                "flex";
-        }
-
-    },1000);
-
-    input.focus();
+function updateAcc(){
+ const acc=total?Math.round(((total-mistakes)/total)*100):100;
+ document.getElementById("accuracy").textContent=acc+"%";
 }
 
-input.addEventListener("keydown",(e)=>{
+document.addEventListener("keydown",e=>{
+ const txt=currentText();
+ if(!txt) return;
 
-    if(!gameRunning){
-        e.preventDefault();
-        return;
-    }
+ let expected=txt[pos];
 
-    if(e.key.length !== 1){
-        e.preventDefault();
-        return;
-    }
+ if(expected===" "){
+   pos++;
+   render();
+   expected=txt[pos];
+ }
 
-    totalTyped++;
+ if(e.key.length!==1) return;
 
-    if(e.key === currentText[currentPos]){
+ total++;
 
-        clickSound.currentTime = 0;
-        clickSound.play();
+ if(e.key===expected){
+   playClick();
+   pos++;
+   if(txt[pos]===" "){ pos++; } // auto-skip spaces
+   render();
 
-        currentPos++;
-
-        renderText();
-
-        if(currentPos >= currentText.length){
-
-            score += 10;
-
-            document.getElementById("score").textContent =
-                score;
-
-            nextExercise();
-        }
-
-    }else{
-        mistakes++;
-    }
-
-    updateAccuracy();
-
-    e.preventDefault();
+   if(pos>=txt.length){
+      score+=10;
+      document.getElementById("score").textContent=score;
+      nextItem();
+   }
+ }else{
+   mistakes++;
+ }
+ updateAcc();
+ e.preventDefault();
 });
 
-document.getElementById("startBtn")
-.addEventListener("click",startGame);
+function startGame(){
+ clearInterval(timer);
+ if(!document.getElementById("timerToggle").checked || mode==="instruction"){
+   document.getElementById("time").textContent="∞";
+   render();
+   return;
+ }
 
-document.getElementById("nextBtn")
-.addEventListener("click",nextExercise);
+ time=60;
+ timer=setInterval(()=>{
+   time--;
+   document.getElementById("time").textContent=time;
 
-loadExercise();
+   if(time<=5 && time>0){
+      document.getElementById("countdown").textContent=time;
+   }
 
+   if(time<=0){
+      clearInterval(timer);
+      document.getElementById("finalScore").textContent=score;
+      document.getElementById("gameover").style.display="flex";
+   }
+ },1000);
+
+ render();
+}
+
+document.getElementById("instructionBtn").onclick=()=>mode="instruction";
+document.getElementById("exerciseBtn").onclick=()=>mode="exercise";
+document.getElementById("startBtn").onclick=startGame;
+
+render();
 </script>
-
 </body>
 </html>
