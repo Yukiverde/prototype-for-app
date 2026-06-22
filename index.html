@@ -3,19 +3,19 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Happy Typing Trainer</title>
+<title>Touch Typing Adventure</title>
 
 <style>
 *{
-    box-sizing:border-box;
     margin:0;
     padding:0;
-    font-family:Arial, Helvetica, sans-serif;
+    box-sizing:border-box;
 }
 
 body{
+    font-family:Arial,Helvetica,sans-serif;
     min-height:100vh;
-    background:linear-gradient(135deg,#b8f3ff,#ffe5f1);
+    background:linear-gradient(135deg,#87d8ff,#8f8cff,#b55dff);
     display:flex;
     justify-content:center;
     align-items:center;
@@ -24,65 +24,93 @@ body{
 
 .app{
     width:100%;
-    max-width:900px;
+    max-width:1100px;
     background:white;
-    border-radius:35px;
-    padding:30px;
-    box-shadow:0 15px 40px rgba(0,0,0,0.12);
+    border-radius:40px;
+    padding:25px;
+    box-shadow:0 20px 50px rgba(0,0,0,.15);
+}
+
+.header{
+    display:flex;
+    gap:20px;
+    align-items:center;
+    justify-content:center;
+    flex-wrap:wrap;
+    margin-bottom:20px;
+}
+
+.logo{
+    width:90px;
+    height:90px;
+    object-fit:contain;
+    border-radius:25px;
 }
 
 h1{
-    text-align:center;
-    color:#4f7cff;
-    margin-bottom:20px;
+    color:#2f4fff;
     font-size:2.4rem;
 }
 
 .subtitle{
     text-align:center;
     color:#666;
-    margin-bottom:25px;
+    margin-bottom:20px;
 }
 
-.top-bar{
-    display:flex;
-    gap:15px;
-    justify-content:center;
-    flex-wrap:wrap;
+.stats{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+    gap:12px;
     margin-bottom:20px;
 }
 
 .card{
-    background:#f5f9ff;
-    padding:14px 22px;
+    background:#eef7ff;
     border-radius:25px;
+    padding:15px;
+    text-align:center;
     font-weight:bold;
-    color:#444;
-    min-width:120px;
+}
+
+.lessonInfo{
+    background:#fff5c7;
+    border-radius:25px;
+    padding:18px;
+    margin-bottom:15px;
     text-align:center;
 }
 
-.lesson-box{
-    background:#fff8d6;
+.lessonTitle{
+    font-size:1.3rem;
+    font-weight:bold;
+    color:#555;
+    margin-bottom:8px;
+}
+
+.lessonInstruction{
+    color:#444;
+    line-height:1.5;
+}
+
+.textDisplay{
+    background:#f7f9ff;
+    min-height:150px;
     border-radius:30px;
     padding:25px;
-    margin-bottom:20px;
-    min-height:130px;
-    display:flex;
-    flex-wrap:wrap;
-    align-items:center;
-    justify-content:center;
-    gap:2px;
     font-size:2rem;
+    line-height:1.7;
     text-align:center;
+    margin-bottom:15px;
+    word-wrap:break-word;
 }
 
 .correct{
-    color:#8cc63f;
+    color:#6fcf4a;
 }
 
 .current{
-    color:#ff5e8a;
+    color:#ff4f8a;
     text-decoration:underline;
 }
 
@@ -90,78 +118,110 @@ h1{
     color:#999;
 }
 
-.input-box{
+.inputBox{
     width:100%;
-    padding:18px;
-    border:none;
-    outline:none;
-    border-radius:25px;
-    background:#eef6ff;
+    padding:20px;
     font-size:1.3rem;
+    border:none;
+    border-radius:25px;
+    background:#eef7ff;
     text-align:center;
+    outline:none;
 }
 
 .controls{
     display:flex;
-    gap:15px;
-    justify-content:center;
     flex-wrap:wrap;
-    margin-top:20px;
+    justify-content:center;
+    gap:10px;
+    margin-top:15px;
 }
 
 button{
     border:none;
-    padding:15px 28px;
     border-radius:25px;
-    font-size:1rem;
-    font-weight:bold;
+    padding:14px 24px;
     cursor:pointer;
-    transition:.2s;
+    font-weight:bold;
+    font-size:1rem;
 }
 
-button:hover{
-    transform:translateY(-2px);
+.startBtn{
+    background:#79e285;
 }
 
-.start{
-    background:#7ee787;
+.nextBtn{
+    background:#82d3ff;
 }
 
-.new{
-    background:#8fd8ff;
+.countdown{
+    text-align:center;
+    font-size:3rem;
+    font-weight:bold;
+    color:#ff3d3d;
+    height:60px;
+    margin-top:10px;
 }
 
 .message{
-    margin-top:20px;
+    margin-top:10px;
     text-align:center;
-    font-size:1.2rem;
-    color:#555;
+    font-size:1.1rem;
     min-height:35px;
 }
 
-.level-select{
-    display:flex;
-    justify-content:center;
-    gap:10px;
-    flex-wrap:wrap;
+.progressBar{
+    height:22px;
+    background:#eee;
+    border-radius:50px;
+    overflow:hidden;
     margin-bottom:20px;
 }
 
-.level{
-    padding:10px 18px;
-    border-radius:20px;
-    background:#f0f0f0;
-    cursor:pointer;
-    font-weight:bold;
+.progress{
+    height:100%;
+    width:0%;
+    background:linear-gradient(90deg,#69d4ff,#7c7cff);
+    transition:.3s;
 }
 
-.level.active{
-    background:#ffb6d9;
+.modal{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.6);
+    display:none;
+    justify-content:center;
+    align-items:center;
+    z-index:999;
 }
 
-@media(max-width:600px){
-    .lesson-box{
-        font-size:1.4rem;
+.modalContent{
+    background:white;
+    width:90%;
+    max-width:500px;
+    border-radius:35px;
+    padding:30px;
+    text-align:center;
+}
+
+.modalContent h2{
+    color:#4a5cff;
+    margin-bottom:15px;
+}
+
+.modalContent p{
+    margin:10px 0;
+    font-size:1.1rem;
+}
+
+.modalContent button{
+    margin-top:15px;
+    background:#79e285;
+}
+
+@media(max-width:700px){
+    .textDisplay{
+        font-size:1.3rem;
     }
 
     h1{
@@ -174,208 +234,361 @@ button:hover{
 
 <div class="app">
 
-    <h1>⌨️ Happy Typing Trainer</h1>
+    <div class="header">
+        <img src="logo.png" class="logo" alt="logo">
+        <h1>Touch Typing Adventure</h1>
+    </div>
+
     <div class="subtitle">
-        Learn touch typing without looking at the keyboard!
+        Learn touch typing step by step without looking at the keyboard!
     </div>
 
-    <div class="level-select">
-        <div class="level active" data-level="easy">Easy</div>
-        <div class="level" data-level="medium">Medium</div>
-        <div class="level" data-level="hard">Hard</div>
+    <div class="stats">
+        <div class="card">⏰ Time<br><span id="time">60</span></div>
+        <div class="card">⭐ Score<br><span id="score">0</span></div>
+        <div class="card">🎯 Accuracy<br><span id="accuracy">100%</span></div>
+        <div class="card">🏆 Level<br><span id="level">1</span></div>
     </div>
 
-    <div class="top-bar">
-        <div class="card">⏰ Time: <span id="time">30</span></div>
-        <div class="card">🎯 Accuracy: <span id="accuracy">100</span>%</div>
-        <div class="card">⭐ Score: <span id="score">0</span></div>
+    <div class="progressBar">
+        <div class="progress" id="progress"></div>
     </div>
 
-    <div class="lesson-box" id="lesson"></div>
+    <div class="lessonInfo">
+        <div class="lessonTitle" id="lessonTitle"></div>
+        <div class="lessonInstruction" id="lessonInstruction"></div>
+    </div>
+
+    <div id="textDisplay" class="textDisplay"></div>
 
     <input
         id="typingInput"
-        class="input-box"
-        type="text"
+        class="inputBox"
+        placeholder="Type here..."
         autocomplete="off"
         spellcheck="false"
-        placeholder="Type here..."
     >
 
+    <div class="countdown" id="countdown"></div>
+
     <div class="controls">
-        <button class="start" id="startBtn">▶ Start Lesson</button>
-        <button class="new" id="newBtn">🔄 New Words</button>
+        <button class="startBtn" id="startBtn">▶ Start Adventure</button>
+        <button class="nextBtn" id="nextBtn">⏭ Next Exercise</button>
     </div>
 
-    <div class="message" id="message">
-        Press Start and begin typing!
-    </div>
+    <div class="message" id="message"></div>
 
 </div>
 
+<div class="modal" id="gameOverModal">
+    <div class="modalContent">
+        <h2>🎉 Game Over!</h2>
+
+        <p>Score: <strong id="finalScore"></strong></p>
+        <p>Accuracy: <strong id="finalAccuracy"></strong></p>
+        <p>Level Reached: <strong id="finalLevel"></strong></p>
+
+        <button onclick="location.reload()">Play Again</button>
+    </div>
+</div>
+
+<audio id="clickSound" preload="auto">
+    <source src="Mouseclicksound.mp3" type="audio/mpeg">
+</audio>
+
 <script>
-const easyLessons = [
-    "cat",
-    "dog",
-    "sun",
-    "book",
-    "apple",
-    "happy",
-    "school",
-    "friend",
-    "hello",
-    "thank you"
+
+const lessons = [
+
+{
+title:"Level 1 - Home Position",
+instruction:"Place your left index finger on F and your right index finger on J. Feel the bumps on these keys.",
+sentences:[
+"f j f j",
+"ff jj ff jj",
+"fj fj fj fj",
+"jf jf jf jf",
+"f j f j f j",
+"jj ff jj ff"
+]
+},
+
+{
+title:"Level 2 - Home Row",
+instruction:"Keep fingers on ASDF and JKL;. Return to home position after every key.",
+sentences:[
+"asdf jkl",
+"dad fad",
+"sad lad",
+"ask flask",
+"falls all",
+"dad asks"
+]
+},
+
+{
+title:"Level 3 - Top Row",
+instruction:"Reach upward and return to home row.",
+sentences:[
+"we were quiet",
+"type your way",
+"try to write",
+"power over fear",
+"quick red tree",
+"we require practice"
+]
+},
+
+{
+title:"Level 4 - Bottom Row",
+instruction:"Reach down and return to home row.",
+sentences:[
+"zoo zoom zone",
+"xray buzz",
+"very brave zebra",
+"move your fingers",
+"victory comes slowly",
+"never give up"
+]
+},
+
+{
+title:"Level 5 - Words",
+instruction:"Type common words while keeping eyes on the screen.",
+sentences:[
+"apple orange banana grape",
+"school teacher student lesson",
+"friend family music movie",
+"happy funny clever bright",
+"travel future dream adventure",
+"garden flower river mountain"
+]
+},
+
+{
+title:"Level 6 - Sentences",
+instruction:"Type complete sentences smoothly and accurately.",
+sentences:[
+"The cat sleeps on the sofa.",
+"I enjoy learning English every day.",
+"Practice makes typing feel natural.",
+"My friend likes reading books.",
+"We walked through the park together.",
+"The weather is beautiful today."
+]
+},
+
+{
+title:"Level 7 - Advanced",
+instruction:"Focus on speed and accuracy together.",
+sentences:[
+"The quick brown fox jumps over the lazy dog.",
+"Consistent effort creates remarkable improvement.",
+"Learning new skills requires patience and focus.",
+"Successful students build strong daily habits.",
+"Small actions repeated daily produce huge results.",
+"Typing confidently helps communication and productivity."
+]
+}
+
 ];
 
-const mediumLessons = [
-    "typing is fun",
-    "practice every day",
-    "english is useful",
-    "i like learning",
-    "never give up",
-    "keep your eyes forward"
+const extraWords = [
+"apple","banana","orange","grape","watermelon","peach","pear","plum","mango","kiwi",
+"school","teacher","student","library","notebook","computer","science","history","music","art",
+"friend","family","brother","sister","mother","father","uncle","aunt","cousin","neighbor",
+"happy","excited","careful","brave","strong","gentle","creative","curious","friendly","helpful",
+"morning","afternoon","evening","night","today","tomorrow","yesterday","weekend","holiday","vacation",
+"mountain","river","ocean","forest","desert","village","city","country","island","beach",
+"practice","improve","develop","achieve","explore","discover","create","learn","study","grow",
+"adventure","journey","challenge","opportunity","success","progress","confidence","knowledge","wisdom","experience"
 ];
 
-const hardLessons = [
-    "the quick brown fox jumps over the lazy dog",
-    "accuracy comes before speed",
-    "touch typing is a valuable skill",
-    "consistent practice builds confidence",
-    "successful learners focus on improvement"
-];
+for(let i=0;i<150;i++){
+    extraWords.push(
+        extraWords[i % extraWords.length] +
+        " " +
+        extraWords[(i+7)%extraWords.length] +
+        " " +
+        extraWords[(i+13)%extraWords.length]
+    );
+}
 
+const clickSound = document.getElementById("clickSound");
+
+let levelIndex = 0;
+let sentenceIndex = 0;
 let currentText = "";
-let currentIndex = 0;
+let currentPos = 0;
 let score = 0;
 let totalTyped = 0;
 let mistakes = 0;
-let timeLeft = 30;
-let timer = null;
-let level = "easy";
-let gameActive = false;
+let timeLeft = 60;
+let timer;
+let gameRunning = false;
 
-const lessonEl = document.getElementById("lesson");
-const inputEl = document.getElementById("typingInput");
-const scoreEl = document.getElementById("score");
-const accuracyEl = document.getElementById("accuracy");
-const timeEl = document.getElementById("time");
-const messageEl = document.getElementById("message");
+const display = document.getElementById("textDisplay");
+const input = document.getElementById("typingInput");
 
-function createClickSound(){
-    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+function loadExercise(){
 
-    return function(){
-        const osc = audioContext.createOscillator();
-        const gain = audioContext.createGain();
+    const lesson = lessons[levelIndex];
 
-        osc.connect(gain);
-        gain.connect(audioContext.destination);
+    document.getElementById("lessonTitle").textContent =
+        lesson.title;
 
-        osc.type = "square";
-        osc.frequency.value = 1000;
+    document.getElementById("lessonInstruction").textContent =
+        lesson.instruction;
 
-        gain.gain.setValueAtTime(0.05, audioContext.currentTime);
-        gain.gain.exponentialRampToValueAtTime(
-            0.0001,
-            audioContext.currentTime + 0.04
-        );
+    currentText =
+        lesson.sentences[
+            sentenceIndex % lesson.sentences.length
+        ];
 
-        osc.start();
-        osc.stop(audioContext.currentTime + 0.04);
-    };
-}
+    currentPos = 0;
 
-const clickSound = createClickSound();
-
-function getRandomLesson(){
-    let pool;
-
-    if(level === "easy") pool = easyLessons;
-    else if(level === "medium") pool = mediumLessons;
-    else pool = hardLessons;
-
-    return pool[Math.floor(Math.random() * pool.length)];
-}
-
-function renderText(){
-    lessonEl.innerHTML = "";
-
-    for(let i=0;i<currentText.length;i++){
-        const span = document.createElement("span");
-        span.textContent = currentText[i];
-
-        if(i < currentIndex){
-            span.className = "correct";
-        }else if(i === currentIndex){
-            span.className = "current";
-        }else{
-            span.className = "remaining";
-        }
-
-        lessonEl.appendChild(span);
-    }
-}
-
-function loadLesson(){
-    currentText = getRandomLesson();
-    currentIndex = 0;
-    inputEl.value = "";
     renderText();
 }
 
-function updateAccuracy(){
-    const correct = totalTyped - mistakes;
-    const accuracy = totalTyped === 0
-        ? 100
-        : Math.round((correct / totalTyped) * 100);
+function renderText(){
 
-    accuracyEl.textContent = accuracy;
+    display.innerHTML = "";
+
+    for(let i=0;i<currentText.length;i++){
+
+        const span = document.createElement("span");
+
+        span.textContent = currentText[i];
+
+        if(i < currentPos){
+            span.className = "correct";
+        }
+        else if(i === currentPos){
+            span.className = "current";
+        }
+        else{
+            span.className = "remaining";
+        }
+
+        display.appendChild(span);
+    }
+
+    const progress =
+        (currentPos/currentText.length)*100;
+
+    document.getElementById("progress").style.width =
+        progress + "%";
 }
 
-function finishLesson(){
-    score += 10;
-    scoreEl.textContent = score;
+function updateAccuracy(){
 
-    messageEl.textContent = "🎉 Great job! New challenge loaded!";
-    loadLesson();
+    let accuracy = 100;
+
+    if(totalTyped > 0){
+        accuracy =
+            Math.round(
+                ((totalTyped-mistakes)/totalTyped)*100
+            );
+    }
+
+    document.getElementById("accuracy").textContent =
+        accuracy + "%";
+}
+
+function nextExercise(){
+
+    sentenceIndex++;
+
+    if(sentenceIndex >= lessons[levelIndex].sentences.length){
+
+        sentenceIndex = 0;
+
+        if(levelIndex < lessons.length-1){
+
+            levelIndex++;
+
+            document.getElementById("level").textContent =
+                levelIndex + 1;
+
+            document.getElementById("message").textContent =
+                "🎉 Level Up!";
+        }
+        else{
+
+            const random =
+                extraWords[
+                    Math.floor(Math.random()*extraWords.length)
+                ];
+
+            currentText = random;
+            currentPos = 0;
+            renderText();
+            return;
+        }
+    }
+
+    loadExercise();
 }
 
 function startGame(){
+
     clearInterval(timer);
 
+    gameRunning = true;
     score = 0;
     totalTyped = 0;
     mistakes = 0;
-    timeLeft = 30;
+    timeLeft = 60;
 
-    scoreEl.textContent = score;
-    accuracyEl.textContent = "100";
-    timeEl.textContent = timeLeft;
+    document.getElementById("score").textContent = score;
+    document.getElementById("time").textContent = timeLeft;
 
-    gameActive = true;
+    loadExercise();
 
-    loadLesson();
+    timer = setInterval(()=>{
 
-    timer = setInterval(() => {
         timeLeft--;
-        timeEl.textContent = timeLeft;
 
-        if(timeLeft <= 0){
-            clearInterval(timer);
-            gameActive = false;
-            messageEl.textContent =
-                "⏰ Time's up! Final score: " + score;
+        document.getElementById("time").textContent =
+            timeLeft;
+
+        if(timeLeft <= 5 && timeLeft > 0){
+
+            document.getElementById("countdown").textContent =
+                timeLeft;
+
         }
+
+        if(timeLeft === 0){
+
+            clearInterval(timer);
+
+            gameRunning = false;
+
+            document.getElementById("countdown").textContent =
+                "";
+
+            document.getElementById("finalScore").textContent =
+                score;
+
+            document.getElementById("finalAccuracy").textContent =
+                document.getElementById("accuracy").textContent;
+
+            document.getElementById("finalLevel").textContent =
+                levelIndex + 1;
+
+            document.getElementById("gameOverModal").style.display =
+                "flex";
+        }
+
     },1000);
 
-    inputEl.focus();
-    messageEl.textContent =
-        "Type the highlighted character!";
+    input.focus();
 }
 
-inputEl.addEventListener("keydown", function(e){
+input.addEventListener("keydown",(e)=>{
 
-    if(!gameActive){
+    if(!gameRunning){
         e.preventDefault();
         return;
     }
@@ -387,17 +600,23 @@ inputEl.addEventListener("keydown", function(e){
 
     totalTyped++;
 
-    const expected = currentText[currentIndex];
+    if(e.key === currentText[currentPos]){
 
-    if(e.key === expected){
+        clickSound.currentTime = 0;
+        clickSound.play();
 
-        clickSound();
+        currentPos++;
 
-        currentIndex++;
         renderText();
 
-        if(currentIndex >= currentText.length){
-            finishLesson();
+        if(currentPos >= currentText.length){
+
+            score += 10;
+
+            document.getElementById("score").textContent =
+                score;
+
+            nextExercise();
         }
 
     }else{
@@ -409,30 +628,14 @@ inputEl.addEventListener("keydown", function(e){
     e.preventDefault();
 });
 
-document.getElementById("startBtn").addEventListener("click", () => {
-    startGame();
-});
+document.getElementById("startBtn")
+.addEventListener("click",startGame);
 
-document.getElementById("newBtn").addEventListener("click", () => {
-    loadLesson();
-    inputEl.focus();
-});
+document.getElementById("nextBtn")
+.addEventListener("click",nextExercise);
 
-document.querySelectorAll(".level").forEach(btn => {
-    btn.addEventListener("click", () => {
+loadExercise();
 
-        document
-            .querySelectorAll(".level")
-            .forEach(x => x.classList.remove("active"));
-
-        btn.classList.add("active");
-        level = btn.dataset.level;
-
-        loadLesson();
-    });
-});
-
-loadLesson();
 </script>
 
 </body>
